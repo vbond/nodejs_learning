@@ -8,7 +8,7 @@ const fs = require('fs')
 const outFile = "./csv/hometask1_2.txt";
 fs.writeFile(outFile, "", err => {
 	if (err) {
-		console.error(err)
+		console.error(err);
 	}
 })
 
