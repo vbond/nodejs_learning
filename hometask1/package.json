@@ -1,0 +1,11 @@
+{
+  "name": "hometask1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hometask1.js",
+  "scripts": {
+    "hometask1": "nodemon hometask1.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
