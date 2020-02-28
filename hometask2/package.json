@@ -1,0 +1,24 @@
+{
+  "name": "hometask2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hometask2.js",
+  "scripts": {
+    "hometask2_1": "nodemon hometask2_1.js",
+    "hometask2_2": "nodemon hometask2_2.js",
+    "hometask2_1b": "nodemon --exec babel-node hometask2_1.js",
+    "hometask2_2b": "nodemon --exec babel-node hometask2_2.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/node": "^7.8.4",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.18.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
