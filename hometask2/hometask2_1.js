@@ -1,4 +1,3 @@
-
 const express = require("express");
 const app = express();
 
@@ -7,6 +6,30 @@ app.use(bodyParser.json() );
 app.use(bodyParser.urlencoded({
   extended: true
 })); 
+
+
+const Joi = require("@hapi/joi");
+const validator = require("express-joi-validation").createValidator({});
+
+const schema = Joi.object({
+	login: Joi.string()
+		.alphanum()
+		.min(5)
+		.max(30)
+		.required(),
+
+	password: Joi.string()
+		.pattern(new RegExp("^[a-zA-Z0-9]{8,30}$"))
+		.required(),
+
+	age: Joi.number()
+		.integer()
+		.min(4)
+		.max(130)
+		.required(),
+});
+
+
 
 const usersMap = new Map();
 let uid = 1;
@@ -66,7 +89,7 @@ app.get("/users/:login/:limit", (req, res) => {
 });
 
 //create
-app.post("/user", (req, res) => {
+app.post("/user", validator.body(schema), (req, res) => {
 	let id = uid.toString();
 
 	let user = {
@@ -98,7 +121,7 @@ app.delete("/user/:id", (req, res) => {
 });
 
 //update
-app.put("/user/:id", (req, res) => {
+app.put("/user/:id", validator.body(schema), (req, res) => {
 	let id = req.params.id;
 
 	let user = usersMap.get(id);
@@ -116,3 +139,7 @@ app.put("/user/:id", (req, res) => {
 app.listen(3001, () => {
 	console.log("Example app listening on port 3001!");
 });
+
+
+
+
