@@ -8,11 +8,11 @@ app.use(bodyParser.urlencoded({
   extended: true
 })); 
 
-
 const usersMap = new Map();
 let uid = 1;
 
-app.get("/user/:id", function (req, res) {
+//read
+app.get("/user/:id", (req, res) => {
 	
 	let id = req.params.id;
 	
@@ -25,7 +25,8 @@ app.get("/user/:id", function (req, res) {
 	
 });
 
-app.get("/users/:login/:limit", function (req, res) {
+//autosuggest
+app.get("/users/:login/:limit", (req, res) => {
 	
 	const login = req.params.login;
 	let limit = parseInt(req.params.limit);
@@ -44,7 +45,7 @@ app.get("/users/:login/:limit", function (req, res) {
 	}
 
 	if (userResult.length > 0) {
-		userResult.sort(function(a, b) {
+		userResult.sort((a, b) => {
 			var loginA = a.login.toUpperCase();
 			var loginB = b.login.toUpperCase();
 	
@@ -64,7 +65,8 @@ app.get("/users/:login/:limit", function (req, res) {
 	}
 });
 
-app.post("/user", function (req, res) {
+//create
+app.post("/user", (req, res) => {
 	let id = uid.toString();
 
 	let user = {
@@ -80,7 +82,8 @@ app.post("/user", function (req, res) {
 	uid++;
 });
 
-app.delete("/user/:id", function (req, res) {
+//delete
+app.delete("/user/:id", (req, res) => {
 	
 	let id = req.params.id;
 	
@@ -94,7 +97,8 @@ app.delete("/user/:id", function (req, res) {
 	}
 });
 
-app.put("/user/:id", function (req, res) {
+//update
+app.put("/user/:id", (req, res) => {
 	let id = req.params.id;
 
 	let user = usersMap.get(id);
@@ -109,6 +113,6 @@ app.put("/user/:id", function (req, res) {
 	}
 });
 
-app.listen(3001, function () {
+app.listen(3001, () => {
 	console.log("Example app listening on port 3001!");
 });
