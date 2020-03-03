@@ -1,61 +1,28 @@
-const express = require("express");
-const app = express();
-
-const bodyParser = require("body-parser");
-app.use(bodyParser.json() );
-app.use(bodyParser.urlencoded({
-  extended: true
-})); 
-
-
-const Joi = require("@hapi/joi");
-const validator = require("express-joi-validation").createValidator({});
-
-const schema = Joi.object({
-	login: Joi.string()
-		.alphanum()
-		.min(5)
-		.max(30)
-		.required(),
-
-	password: Joi.string()
-		.pattern(new RegExp("^[a-zA-Z0-9]{8,30}$"))
-		.required(),
-
-	age: Joi.number()
-		.integer()
-		.min(4)
-		.max(130)
-		.required(),
-});
-
-
+import uuid from 'uuid-random';
 
 const usersMap = new Map();
-let uid = 1;
 
 //read
-app.get("/user/:id", (req, res) => {
+exports.read = (req, res) => {
 	
-	let id = req.params.id;
+	const id = req.params.id;
 	
-	let user = usersMap.get(id);
+	const user = usersMap.get(id);
 	if (user && !user.isDeleted) {
 		res.send("user = " + JSON.stringify(user));
 	} else {
 		res.send("user not found, id = " + id);
 	}
-	
-});
+};
 
 //autosuggest
-app.get("/users/:login/:limit", (req, res) => {
+exports.autosuggest = (req, res) => {
 	
 	const login = req.params.login;
-	let limit = parseInt(req.params.limit);
+	const limit = parseInt(req.params.limit);
 
 	let count = 0;
-	let userResult = new Array();
+	const userResult = [];
 	const pattern = RegExp(".*" + login + ".*");
 	for (const [id, user] of usersMap) {
 		if (pattern.test(user.login) && !user.isDeleted) {
@@ -69,8 +36,8 @@ app.get("/users/:login/:limit", (req, res) => {
 
 	if (userResult.length > 0) {
 		userResult.sort((a, b) => {
-			var loginA = a.login.toUpperCase();
-			var loginB = b.login.toUpperCase();
+			const loginA = a.login.toUpperCase();
+			const loginB = b.login.toUpperCase();
 	
 			if (loginA < loginB) {
 				return -1;
@@ -86,13 +53,13 @@ app.get("/users/:login/:limit", (req, res) => {
 	} else {
 		res.send("users not found");
 	}
-});
+};
 
 //create
-app.post("/user", validator.body(schema), (req, res) => {
-	let id = uid.toString();
+exports.create = (req, res) => {
+	const id = uuid();
 
-	let user = {
+	const user = {
 			id:id, 
 			login:req.body.login, 
 			password:req.body.password, 
@@ -101,16 +68,14 @@ app.post("/user", validator.body(schema), (req, res) => {
 	};
 	usersMap.set(id, user);
 	res.send("user created, id = " + id);
-
-	uid++;
-});
+};
 
 //delete
-app.delete("/user/:id", (req, res) => {
+exports.delete = (req, res) => {
 	
-	let id = req.params.id;
+	const id = req.params.id;
 	
-	let user = usersMap.get(id);
+	const user = usersMap.get(id);
 	if (user) {
 		user.isDeleted = true;
 
@@ -118,13 +83,13 @@ app.delete("/user/:id", (req, res) => {
 	} else {
 		res.send("user not found, id = " + id);
 	}
-});
+};
 
 //update
-app.put("/user/:id", validator.body(schema), (req, res) => {
-	let id = req.params.id;
+exports.update = (req, res) => {
+	const id = req.params.id;
 
-	let user = usersMap.get(id);
+	const user = usersMap.get(id);
 	if (user && !user.isDeleted) {
 		user.login = req.body.login;
 		user.password = req.body.password;
@@ -134,12 +99,4 @@ app.put("/user/:id", validator.body(schema), (req, res) => {
 	} else {
 		res.send("user not found, id = " + id);
 	}
-});
-
-app.listen(3001, () => {
-	console.log("Example app listening on port 3001!");
-});
-
-
-
-
+};
