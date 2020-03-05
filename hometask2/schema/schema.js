@@ -21,4 +21,4 @@ const schema = Joi.object({
 });
 
 
-module.exports = validator.body(schema);
+export default validator.body(schema);

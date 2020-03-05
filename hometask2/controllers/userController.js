@@ -3,7 +3,7 @@ import uuid from 'uuid-random';
 const usersMap = new Map();
 
 //read
-exports.read = (req, res) => {
+const _read = (req, res) => {
 	
 	const id = req.params.id;
 	
@@ -16,7 +16,7 @@ exports.read = (req, res) => {
 };
 
 //autosuggest
-exports.autosuggest = (req, res) => {
+const _autosuggest = (req, res) => {
 	
 	const login = req.params.login;
 	const limit = parseInt(req.params.limit);
@@ -56,7 +56,7 @@ exports.autosuggest = (req, res) => {
 };
 
 //create
-exports.create = (req, res) => {
+const _create = (req, res) => {
 	const id = uuid();
 
 	const user = {
@@ -71,7 +71,7 @@ exports.create = (req, res) => {
 };
 
 //delete
-exports.delete = (req, res) => {
+const _delete = (req, res) => {
 	
 	const id = req.params.id;
 	
@@ -86,7 +86,7 @@ exports.delete = (req, res) => {
 };
 
 //update
-exports.update = (req, res) => {
+const _update = (req, res) => {
 	const id = req.params.id;
 
 	const user = usersMap.get(id);
@@ -100,3 +100,5 @@ exports.update = (req, res) => {
 		res.send("user not found, id = " + id);
 	}
 };
+
+export { _update, _delete, _create, _autosuggest, _read};
