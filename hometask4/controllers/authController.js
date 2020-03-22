@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 const secret = 'secret';
 
 const _checkToken = (req, res, next) => {
-	console.log("156465456");
 	let token = req.headers['x-access-token'];
 
 	if (token) {
