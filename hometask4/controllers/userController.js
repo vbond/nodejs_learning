@@ -32,7 +32,7 @@ const _autosuggest = (req, res) => {
 		}
 	}
 
-	if (userResult.length > 0) {
+	if (userResult.length) {
 		userResult.sort((a, b) => {
 			const loginA = a.login.toUpperCase();
 			const loginB = b.login.toUpperCase();

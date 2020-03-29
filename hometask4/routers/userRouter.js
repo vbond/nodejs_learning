@@ -29,14 +29,4 @@ router.delete("/:id", _delete);
 //update
 router.put("/:id", validator, _update);
 
-router.use((err, req, res, next) => {
-	logger.error("req.method=" + req.method);
-	logger.error("req.url=" + req.url);
-	logger.error("req.body=" + JSON.stringify(req.body));
-	logger.error("message=" + err.message);
-
-	logger.error("Error occured! " + err.stack);
-	res.status(500).send("Error occured!");
-});
-
 export default router;
