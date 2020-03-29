@@ -7,11 +7,10 @@ const _read = (req, res) => {
 	const id = req.params.id;
 	
 	const user = usersMap.get(id);
-	if (user && !user.isDeleted) {
-		res.send("user = " + JSON.stringify(user));
-	} else {
-		res.status(500).send("user not found, id = " + id);
+	if (!user || user.isDeleted) {
+		return res.status(500).send("user not found, id = " + id);
 	}
+	res.send("user = " + JSON.stringify(user));
 };
 
 //autosuggest
@@ -32,25 +31,25 @@ const _autosuggest = (req, res) => {
 		}
 	}
 
-	if (userResult.length) {
-		userResult.sort((a, b) => {
-			const loginA = a.login.toUpperCase();
-			const loginB = b.login.toUpperCase();
-	
-			if (loginA < loginB) {
-				return -1;
-			}
-			if (loginA > loginB) {
-				return 1;
-			}
-	
-			return 0;
-		});
-	
-		res.send("user = " + JSON.stringify(userResult));
-	} else {
-		res.status(500).send("users not found");
+	if (!userResult.length) {
+		return res.status(500).send("users not found");
 	}
+
+	userResult.sort((a, b) => {
+		const loginA = a.login.toUpperCase();
+		const loginB = b.login.toUpperCase();
+
+		if (loginA < loginB) {
+			return -1;
+		}
+		if (loginA > loginB) {
+			return 1;
+		}
+
+		return 0;
+	});
+
+	res.send("user = " + JSON.stringify(userResult));
 };
 
 //create
@@ -73,13 +72,13 @@ const _delete = (req, res) => {
 	const id = req.params.id;
 	
 	const user = usersMap.get(id);
-	if (user) {
-		user.isDeleted = true;
-
-		res.send("user removed, id = " + id);
-	} else {
-		res.status(500).send("user not found, id = " + id);
+	if (!user) {
+		return res.status(500).send("user not found, id = " + id);
 	}
+
+	user.isDeleted = true;
+
+	res.send("user removed, id = " + id);
 };
 
 //update
@@ -87,15 +86,15 @@ const _update = (req, res) => {
 	const id = req.params.id;
 
 	const user = usersMap.get(id);
-	if (user && !user.isDeleted) {
-		user.login = req.body.login;
-		user.password = req.body.password;
-		user.age = req.body.age;
-
-		res.send("user updated, id = " + id);
-	} else {
-		res.status(500).send("user not found, id = " + id);
+	if (!user || user.isDeleted) {
+		return res.status(500).send("user not found, id = " + id);
 	}
+	
+	user.login = req.body.login;
+	user.password = req.body.password;
+	user.age = req.body.age;
+
+	res.send("user updated, id = " + id);
 };
 
 export { _update, _delete, _create, _autosuggest, _read};
