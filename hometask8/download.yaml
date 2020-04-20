@@ -1,0 +1,430 @@
+swagger: '2.0'
+info:
+  description: This is a user API
+  version: 1.0.0
+  title: User API
+  # put the contact info for your development or API team
+  contact:
+    email: vitaliy.bondarenko@epam.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+schemes:
+ - https
+# Added by API Auto Mocking Plugin
+host: localhost:3005
+# Added by API Auto Mocking Plugin
+basePath: /
+
+# tags are used for organizing operations
+tags:
+- name: groups
+  description: Group CRUD operations
+- name: users
+  description: User CRUD operations
+- name: auth
+  description: auth operations
+
+paths:
+
+  /login:
+    post:
+      tags:
+      - auth
+      summary: logins to application
+      description: |
+        logins and gets auth token
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: login
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: OK
+          examples:
+            application/json: 
+              {
+                success: true,
+                message: 'Authentication successful!',
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTg0OTEzOTcxLCJleHAiOjE1ODUwMDAzNzF9.jJnl0GDUVIVQVGh31U9-JWpHzo6CwhlHAML5Ah9Quis'
+              }
+        400:
+          description: Bad request
+          examples:
+            application/json:
+              {
+                success: false,
+                message: 'Authentication failed! Please check the request'
+              }
+        403:
+          description: Forbidden
+          examples:
+            application/json:
+              {
+                success: false,
+                message: 'Incorrect username or password'
+              }
+
+  /user/{id}:
+    get:
+      tags:
+      - users
+      summary: Returns user by specified ID
+      description: |
+        By passing the appropriate ID, you can search for
+        available user in the system
+      produces:
+      - application/json
+      security:
+        - Bearer: []
+      parameters:
+      - in: path
+        name: id
+        description: user id
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/User'
+        500:
+          description: user not found, id = {id}
+        401:
+          $ref: '#/responses/Forbidden'
+        403:
+          $ref: '#/responses/Unauthorized'
+
+    delete:
+      tags:
+      - users
+      summary: Removes user by specified ID
+      description: |
+        By passing the appropriate ID, you can remove
+        available uer in the system
+      security:
+        - Bearer: []
+      parameters:
+      - in: path
+        name: id
+        description: user id
+        required: true
+        type: string
+      responses:
+        200:
+          description: user removed, id = {id}
+        500:
+          description: user not found, id = {id}
+        401:
+          $ref: '#/responses/Forbidden'
+        403:
+          $ref: '#/responses/Unauthorized'
+
+    put:
+      tags:
+      - users
+      summary: Updates group by specified ID
+      description: |
+        By passing the appropriate ID, you can update
+        available user in the system
+      security:
+        - Bearer: []
+      parameters:
+      - in: path
+        name: id
+        description: user id
+        required: true
+        type: string
+      - in: body
+        name: user
+        schema:
+          $ref: '#/definitions/UserBase'
+      responses:
+        200:
+          description: user updated, id = {id}
+        400:
+          description: Error validating request body. {message}
+        500:
+          description: user not found, id = {id}
+        401:
+          $ref: '#/responses/Forbidden'
+        403:
+          $ref: '#/responses/Unauthorized'
+
+  /user:
+    post:
+      tags:
+      - users
+      summary: Creates user
+      description: |
+        Creates user in the system
+      security:
+        - Bearer: []
+      parameters:
+        - in: body
+          name: user
+          schema:
+            $ref: '#/definitions/UserBase'
+      responses:
+        200:
+          description: user created, id = {id}
+        400:
+          description: Error validating request body. {message}
+        401:
+          $ref: '#/responses/Forbidden'
+        403:
+          $ref: '#/responses/Unauthorized'
+
+  /user/{login}/{limit}:
+    get:
+      tags:
+      - users
+      summary: Returns list of users by 
+      description: |
+        By passing the login part and limit of result size, you can search available users in the system
+      security:
+        - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: login
+        description: login part
+        required: true
+        type: string
+      - in: path
+        name: limit
+        description: max result size 
+        required: true
+        type: integer
+      responses:
+        200:
+          description: List of users
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/User'
+        500:
+          description: users not found
+        401:
+          $ref: '#/responses/Forbidden'
+        403:
+          $ref: '#/responses/Unauthorized'
+
+
+  /group/{id}:
+    get:
+      tags:
+      - groups
+      summary: Returns group by specified ID
+      description: |
+        By passing the appropriate ID, you can search for
+        available group in the system
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        description: group id
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/Group'
+        500:
+          description: group not found, id = {id}
+
+    delete:
+      tags:
+      - groups
+      summary: Removes group by specified ID
+      description: |
+        By passing the appropriate ID, you can remove
+        available group in the system
+      parameters:
+      - in: path
+        name: id
+        description: group id
+        required: true
+        type: string
+      responses:
+        200:
+          description: group removed, id = {id}
+        500:
+          description: group not found, id = {id}
+
+    put:
+      tags:
+      - groups
+      summary: Updates group by specified ID
+      description: |
+        By passing the appropriate ID, you can update
+        available group in the system
+      parameters:
+      - in: path
+        name: id
+        description: group id
+        required: true
+        type: string
+      - in: body
+        name: group
+        schema:
+          $ref: '#/definitions/GroupBase'
+      responses:
+        200:
+          description: group updated, id = {id}
+        400:
+          description: Error validating request body. {message}
+        500:
+          description: group not found, id = {id}
+
+  
+  /group/get/all:
+    get:
+      tags:
+      - groups
+      summary: Returns all group
+      description: |
+        you can get all available groups in the system
+      produces:
+      - application/json
+      responses:
+        200:
+          description: List of groups
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Group'
+        500:
+          description: groups not found
+          
+  /group:
+    post:
+      tags:
+      - groups
+      summary: Creates group
+      description: |
+        Creates group in the system
+      parameters:
+        - in: body
+          name: group
+          schema:
+            $ref: '#/definitions/GroupBase'
+      responses:
+        200:
+          description: group created, id = {id}
+        400:
+          description: Error validating request body. {message}
+          
+  
+definitions:
+
+  Login:
+    type: object
+    required:
+    - username
+    - password
+    properties:
+      username:
+        type: string
+        example: admin
+      password:
+        type: string
+        example: password
+          
+  GroupBase:
+    type: object
+    required:
+    - name
+    - permissions
+    properties:
+      name:
+        type: string
+        example: My Group
+      permissions:
+        type: array
+        items: 
+          type: string
+        example: ['READ', 'WRITE']
+  Group:
+    allOf:
+      - $ref: '#/definitions/GroupBase'
+      - type: object
+        required:
+        - id
+        properties:
+          id:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      
+        
+  UserBase:
+    type: object
+    required:
+    - login
+    - password
+    - age
+    - groupId
+    properties:
+      login:
+        type: string
+        example: MyLogin
+      password:
+        type: string
+        example: MyPassword1
+      age:
+        type: integer
+        example: 25
+      groupId:
+        type: string
+        format: uuid
+        example: y687f1ee-6c12-3b01-90e6-k123458f0851
+          
+  User:
+    allOf:
+      - $ref: '#/definitions/UserBase'
+      - type: object
+        required:
+        - id
+        - group
+        properties:
+          id:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          group:
+            $ref: '#/definitions/Group'
+
+
+responses:
+    Forbidden:
+      description: Forbidden
+      examples:
+        application/json: 
+          {
+            success: false,
+            message: Token is not valid
+          }
+          
+    Unauthorized:
+      description: Unauthorized
+      examples:
+        application/json:
+          {
+            success: false,
+            message: Auth token is not supplied
+          }
+          
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header

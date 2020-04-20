@@ -1,0 +1,555 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "User API",
+    "description": "This is a user API",
+    "version": "1.0.0"
+  },
+  "produces": ["application/json"],
+  "host": "localhost:8080",
+  "basePath": "/",
+  "paths": {
+  
+  "/group": {
+    "post": {
+      "x-swagger-router-controller": "Groups",
+      "tags": ["Groups"],
+      "operationId": "groupPost",
+      "parameters": [
+        
+        {
+  "in" : "body",
+  "name" : "group",
+  "required" : false,
+  "schema" : {
+    "$ref" : "#/definitions/GroupBase"
+  }
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "group created, id = {id}"
+}
+        ,
+        
+        "400": {
+  "description" : "Error validating request body. {message}"
+}
+        
+        
+      }
+    }
+  } ,
+  
+  "/group/get/all": {
+    "get": {
+      "x-swagger-router-controller": "Groups",
+      "tags": ["Groups"],
+      "operationId": "groupGetAllGet",
+      "responses": {
+        
+        "200": {
+  "description" : "List of groups",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/Group"
+    }
+  }
+}
+        ,
+        
+        "500": {
+  "description" : "groups not found"
+}
+        
+        
+      }
+    }
+  } ,
+  
+  "/group/{id}": {
+    "get": {
+      "x-swagger-router-controller": "Groups",
+      "tags": ["Groups"],
+      "operationId": "groupIdGet",
+      "parameters": [
+        
+        {
+  "name" : "id",
+  "in" : "path",
+  "description" : "group id",
+  "required" : true,
+  "type" : "string"
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "OK",
+  "schema" : {
+    "$ref" : "#/definitions/Group"
+  }
+}
+        ,
+        
+        "500": {
+  "description" : "group not found, id = {id}"
+}
+        
+        
+      }
+    }
+  } ,
+  
+  "/group/{id}": {
+    "put": {
+      "x-swagger-router-controller": "Groups",
+      "tags": ["Groups"],
+      "operationId": "groupIdPut",
+      "parameters": [
+        
+        {
+  "name" : "id",
+  "in" : "path",
+  "description" : "group id",
+  "required" : true,
+  "type" : "string"
+},
+        
+        {
+  "in" : "body",
+  "name" : "group",
+  "required" : false,
+  "schema" : {
+    "$ref" : "#/definitions/GroupBase"
+  }
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "group updated, id = {id}"
+}
+        ,
+        
+        "400": {
+  "description" : "Error validating request body. {message}"
+}
+        ,
+        
+        "500": {
+  "description" : "group not found, id = {id}"
+}
+        
+        
+      }
+    }
+  } ,
+  
+  "/group/{id}": {
+    "delete": {
+      "x-swagger-router-controller": "Groups",
+      "tags": ["Groups"],
+      "operationId": "groupIdDelete",
+      "parameters": [
+        
+        {
+  "name" : "id",
+  "in" : "path",
+  "description" : "group id",
+  "required" : true,
+  "type" : "string"
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "group removed, id = {id}"
+}
+        ,
+        
+        "500": {
+  "description" : "group not found, id = {id}"
+}
+        
+        
+      }
+    }
+  } 
+  
+   ,
+  
+  "/login": {
+    "post": {
+      "x-swagger-router-controller": "Auth",
+      "tags": ["Auth"],
+      "operationId": "loginPost",
+      "parameters": [
+        
+        {
+  "in" : "body",
+  "name" : "login",
+  "required" : false,
+  "schema" : {
+    "$ref" : "#/definitions/Login"
+  }
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "OK",
+  "examples" : {
+    "application/json" : {
+      "success" : true,
+      "message" : "Authentication successful!",
+      "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTg0OTEzOTcxLCJleHAiOjE1ODUwMDAzNzF9.jJnl0GDUVIVQVGh31U9-JWpHzo6CwhlHAML5Ah9Quis"
+    }
+  }
+}
+        ,
+        
+        "400": {
+  "description" : "Bad request",
+  "examples" : {
+    "application/json" : {
+      "success" : false,
+      "message" : "Authentication failed! Please check the request"
+    }
+  }
+}
+        ,
+        
+        "403": {
+  "description" : "Forbidden",
+  "examples" : {
+    "application/json" : {
+      "success" : false,
+      "message" : "Incorrect username or password"
+    }
+  }
+}
+        
+        
+      }
+    }
+  } 
+  
+   ,
+  
+  "/user": {
+    "post": {
+      "x-swagger-router-controller": "Users",
+      "tags": ["Users"],
+      "operationId": "userPost",
+      "parameters": [
+        
+        {
+  "in" : "body",
+  "name" : "user",
+  "required" : false,
+  "schema" : {
+    "$ref" : "#/definitions/UserBase"
+  }
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "user created, id = {id}"
+}
+        ,
+        
+        "400": {
+  "description" : "Error validating request body. {message}"
+}
+        ,
+        
+        "401": { }
+        ,
+        
+        "403": { }
+        
+        
+      }
+    }
+  } ,
+  
+  "/user/{id}": {
+    "get": {
+      "x-swagger-router-controller": "Users",
+      "tags": ["Users"],
+      "operationId": "userIdGet",
+      "parameters": [
+        
+        {
+  "name" : "id",
+  "in" : "path",
+  "description" : "user id",
+  "required" : true,
+  "type" : "string"
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "OK",
+  "schema" : {
+    "$ref" : "#/definitions/User"
+  }
+}
+        ,
+        
+        "500": {
+  "description" : "user not found, id = {id}"
+}
+        ,
+        
+        "401": { }
+        ,
+        
+        "403": { }
+        
+        
+      }
+    }
+  } ,
+  
+  "/user/{id}": {
+    "put": {
+      "x-swagger-router-controller": "Users",
+      "tags": ["Users"],
+      "operationId": "userIdPut",
+      "parameters": [
+        
+        {
+  "name" : "id",
+  "in" : "path",
+  "description" : "user id",
+  "required" : true,
+  "type" : "string"
+},
+        
+        {
+  "in" : "body",
+  "name" : "user",
+  "required" : false,
+  "schema" : {
+    "$ref" : "#/definitions/UserBase"
+  }
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "user updated, id = {id}"
+}
+        ,
+        
+        "400": {
+  "description" : "Error validating request body. {message}"
+}
+        ,
+        
+        "500": {
+  "description" : "user not found, id = {id}"
+}
+        ,
+        
+        "401": { }
+        ,
+        
+        "403": { }
+        
+        
+      }
+    }
+  } ,
+  
+  "/user/{id}": {
+    "delete": {
+      "x-swagger-router-controller": "Users",
+      "tags": ["Users"],
+      "operationId": "userIdDelete",
+      "parameters": [
+        
+        {
+  "name" : "id",
+  "in" : "path",
+  "description" : "user id",
+  "required" : true,
+  "type" : "string"
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "user removed, id = {id}"
+}
+        ,
+        
+        "500": {
+  "description" : "user not found, id = {id}"
+}
+        ,
+        
+        "401": { }
+        ,
+        
+        "403": { }
+        
+        
+      }
+    }
+  } ,
+  
+  "/user/{login}/{limit}": {
+    "get": {
+      "x-swagger-router-controller": "Users",
+      "tags": ["Users"],
+      "operationId": "userLoginLimitGet",
+      "parameters": [
+        
+        {
+  "name" : "login",
+  "in" : "path",
+  "description" : "login part",
+  "required" : true,
+  "type" : "string"
+},
+        
+        {
+  "name" : "limit",
+  "in" : "path",
+  "description" : "max result size",
+  "required" : true,
+  "type" : "integer"
+}
+        
+      ],
+      "responses": {
+        
+        "200": {
+  "description" : "List of users",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/User"
+    }
+  }
+}
+        ,
+        
+        "500": {
+  "description" : "users not found"
+}
+        ,
+        
+        "401": { }
+        ,
+        
+        "403": { }
+        
+        
+      }
+    }
+  } 
+  
+   
+  }, "definitions": {
+  "Login": {
+  "type" : "object",
+  "required" : [ "password", "username" ],
+  "properties" : {
+    "username" : {
+      "type" : "string",
+      "example" : "admin"
+    },
+    "password" : {
+      "type" : "string",
+      "example" : "password"
+    }
+  }
+},"GroupBase": {
+  "type" : "object",
+  "required" : [ "name", "permissions" ],
+  "properties" : {
+    "name" : {
+      "type" : "string",
+      "example" : "My Group"
+    },
+    "permissions" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    }
+  }
+},"Group": {
+  "allOf" : [ {
+    "$ref" : "#/definitions/GroupBase"
+  }, {
+    "type" : "object",
+    "required" : [ "id" ],
+    "properties" : {
+      "id" : {
+        "type" : "string",
+        "format" : "uuid",
+        "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      }
+    }
+  } ]
+},"UserBase": {
+  "type" : "object",
+  "required" : [ "age", "groupId", "login", "password" ],
+  "properties" : {
+    "login" : {
+      "type" : "string",
+      "example" : "MyLogin"
+    },
+    "password" : {
+      "type" : "string",
+      "example" : "MyPassword1"
+    },
+    "age" : {
+      "type" : "integer",
+      "format" : "int32",
+      "example" : "25"
+    },
+    "groupId" : {
+      "type" : "string",
+      "format" : "uuid",
+      "example" : "y687f1ee-6c12-3b01-90e6-k123458f0851"
+    }
+  }
+},"User": {
+  "allOf" : [ {
+    "$ref" : "#/definitions/UserBase"
+  }, {
+    "type" : "object",
+    "required" : [ "group", "id" ],
+    "properties" : {
+      "id" : {
+        "type" : "string",
+        "format" : "uuid",
+        "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      },
+      "group" : {
+        "$ref" : "#/definitions/Group"
+      }
+    }
+  } ]
+}
+  }
+}
